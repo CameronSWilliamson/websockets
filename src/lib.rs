@@ -6,11 +6,11 @@ use std::{
 
 #[derive(Debug)]
 pub struct HttpRequest {
-    method: HttpMethod,
-    target: String,
-    http_version: String,
-    headers: HashMap<String, String>,
-    body: String,
+    pub method: HttpMethod,
+    pub target: String,
+    pub http_version: String,
+    pub headers: HashMap<String, String>,
+    pub body: String,
 }
 
 impl HttpRequest {
@@ -58,27 +58,27 @@ impl HttpRequest {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum HttpMethod {
-    GET,
-    HEAD,
-    POST,
-    PUT,
-    DELETE,
-    CONNECT,
-    OPTIONS,
-    TRACE
+    Get,
+    Head,
+    Post,
+    Put,
+    Delete,
+    Connect,
+    Options,
+    Trace
 }
 
 impl From<&str> for HttpMethod {
     fn from(value: &str) -> Self {
         match value {
-            "get" => Self::GET,
-            "head" => Self::HEAD,
-            "post" => Self::POST,
-            "put" => Self::PUT,
-            "delete" => Self::DELETE,
-            "connect" => Self::CONNECT,
-            "options" => Self::OPTIONS,
-            "trace" => Self::TRACE,
+            "get" => Self::Get,
+            "head" => Self::Head,
+            "post" => Self::Post,
+            "put" => Self::Put,
+            "delete" => Self::Delete,
+            "connect" => Self::Connect,
+            "options" => Self::Options,
+            "trace" => Self::Trace,
             _ => panic!("Invalid HTTP method: {}", value)
         }
     }
@@ -87,14 +87,37 @@ impl From<&str> for HttpMethod {
 impl Display for HttpMethod {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::GET => write!(f, "GET"),
-            Self::HEAD => write!(f, "HEAD"),
-            Self::POST => write!(f, "POST"),
-            Self::PUT => write!(f, "PUT"),
-            Self::DELETE => write!(f, "DELETE"),
-            Self::CONNECT => write!(f, "CONNECT"),
-            Self::OPTIONS => write!(f, "OPTIONS"),
-            Self::TRACE => write!(f, "TRACE"),
+            Self::Get => write!(f, "GET"),
+            Self::Head => write!(f, "HEAD"),
+            Self::Post => write!(f, "POST"),
+            Self::Put => write!(f, "PUT"),
+            Self::Delete => write!(f, "DELETE"),
+            Self::Connect => write!(f, "CONNECT"),
+            Self::Options => write!(f, "OPTIONS"),
+            Self::Trace => write!(f, "TRACE"),
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum HttpError {
+    InvalidMethod,
+    InvalidTarget,
+    InvalidVersion,
+    InvalidHeader,
+    InvalidUpgrade
+}
+
+impl std::error::Error for HttpError {}
+
+impl Display for HttpError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            Self::InvalidMethod => write!(f, "Invalid HTTP method"),
+            Self::InvalidTarget => write!(f, "Invalid HTTP target"),
+            Self::InvalidVersion => write!(f, "Invalid HTTP version"),
+            Self::InvalidHeader => write!(f, "Invalid HTTP header"),
+            Self::InvalidUpgrade => write!(f, "Invalid HTTP upgrade"),
         }
     }
 }

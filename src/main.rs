@@ -1,7 +1,10 @@
-use std::{error::Error, net::{TcpListener, TcpStream}, io::Write};
+use std::{
+    error::Error,
+    io::Write,
+    net::{TcpListener, TcpStream},
+};
 
-use websockets::HttpRequest;
-
+use websockets::{HttpRequest, HttpMethod, HttpError};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let listener = TcpListener::bind("127.0.0.1:8080")?;
